@@ -1,3 +1,5 @@
 /.vscode
 /out.wav
 /test.wav
+/bin
+/obj
