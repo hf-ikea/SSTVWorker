@@ -1,4 +1,4 @@
-#SSTVWorker
+# SSTVWorker
 currently in major prototype phase (ie it doesnt work)
 - stupid martin 1 encoder
 - integrals are dumb
