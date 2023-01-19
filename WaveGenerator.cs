@@ -64,41 +64,148 @@ namespace Wave_Fun
                     break;
                 
                 case WaveType.SSTV:
-                    uint sstvSamples = format.dwSamplesPerSec * 150 * format.wChannels; // seconds
+                    // uint sstvSamples = format.dwSamplesPerSec * 150 * format.wChannels; // seconds
 
-                    data.shortArray = new short[sstvSamples];
+                    // data.shortArray = new short[sstvSamples];
 
-                    VISGenerate.VISReturn returnValue = VISGenerate.VISGenerator(sstvSamples, format.dwSamplesPerSec, format.wChannels, amplitude);
+                    // VISGenerate.VISReturn returnValue = VISGenerate.VISGenerator(sstvSamples, format.dwSamplesPerSec, format.wChannels, amplitude);
 
-                    data.shortArray = returnValue.data;
-                    int i = returnValue.i;
+                    // data.shortArray = returnValue.data;
+                    // int i = returnValue.i;
 
-                    double twelveHundredAngle = (Math.PI * 2 * 1200.0f) / (format.dwSamplesPerSec * format.wChannels);
-                    double separatorAngle = (Math.PI * 2 * 1500.0f) / (format.dwSamplesPerSec * format.wChannels);
-                    double sampleAngle = (Math.PI * 2 * 1600.0f) / (format.dwSamplesPerSec * format.wChannels);
+                    // double twelveHundredAngle = (Math.PI * 2 * 1200.0f) / (format.dwSamplesPerSec * format.wChannels);
+                    // double separatorAngle = (Math.PI * 2 * 1500.0f) / (format.dwSamplesPerSec * format.wChannels);
+                    // double sampleAngle = (Math.PI * 2 * 1600.0f) / (format.dwSamplesPerSec * format.wChannels);
 
-                    // end VIS code
+                    // // end VIS code
 
-                    // Calculate data chunk size in bytes
-                    data.dwChunkSize = (uint)(data.shortArray.Length * (format.wBitsPerSample / 8));
+                    // // Calculate data chunk size in bytes
+                    // data.dwChunkSize = (uint)(data.shortArray.Length * (format.wBitsPerSample / 8));
                     
                     break;
                 case WaveType.Test:
-                    uint samples = format.dwSamplesPerSec * format.wChannels * 10 + 1;
+                    uint samples = format.dwSamplesPerSec * format.wChannels * 140; // 228456448
 
                     data.shortArray = new short[samples];
                     float deviation = 50;
+                    int i = 0;
+                    int pixelPerLine = SSTVWorker.Program.bitmapWidth;
+                    int lines = SSTVWorker.Program.bitmapHeight;
 
                     Program p = new Program();
 
-                    for(uint j = 0; j < samples - 1;)
-                    {
-                        for (int channel = 0; channel < format.wChannels; channel++)
+                    double twelveHundredAngle = (Math.PI * 2 * 1200.0f) / (format.dwSamplesPerSec * format.wChannels);
+                    double separatorAngle = (Math.PI * 2 * 1500.0f) / (format.dwSamplesPerSec * format.wChannels);
+                    double sampleAngle = (Math.PI * 2 * 2300.0f) / (format.dwSamplesPerSec * format.wChannels);
+
+                    for (int j = 0; j < lines; j++){
+                        // sync pulse
+                        for (int k = 0; k < (0.004862 * format.dwSamplesPerSec) - 1; k++) //(0.004862 * format.dwSamplesPerSec * format.wChannels)
                         {
-                            data.shortArray[j + channel] = Convert.ToInt16(amplitude * p.s(j, 0.26f * deviation, deviation));
+                            // Fill with a simple sine wave at max amplitude
+                            for (int channel = 0; channel < format.wChannels; channel++)
+                            {
+                                data.shortArray[i + channel] = Convert.ToInt16(amplitude * Math.Sin(twelveHundredAngle * k));
+                                i++;
+                            }
                         }
-                        j++;
+                        
+                        // separator pulse
+                        for (uint k = 0; k < (0.000572 * format.dwSamplesPerSec) - 1; k++)
+                        {
+                            // Fill with a simple sine wave at max amplitude
+                            for (int channel = 0; channel < format.wChannels; channel++)
+                            {
+                                data.shortArray[i + channel] = Convert.ToInt16(amplitude * Math.Sin(separatorAngle * k));
+                                i++;
+                            }
+                        }
+                        
+                        // green 
+                        for (uint k = 0; k < (0.146432 * format.dwSamplesPerSec) - 1; k++)
+                        {
+                            Console.WriteLine("k: " + k + ", i: " + i);
+                            // Fill with a simple sine wave at max amplitude
+                            for (int channel = 0; channel < format.wChannels; channel++)
+                            {
+                                data.shortArray[i + channel] = Convert.ToInt16(amplitude * Math.Sin(sampleAngle * k));
+                                i++;
+                            }
+                        }
+                        for (int ab = 0; ab < 10000; ab++){
+                            Console.WriteLine("synced");
+                        }
+                        // separator pulse
+                        for (uint k = 0; k < (0.000572 * format.dwSamplesPerSec) - 1; k++)
+                        {
+                            // Fill with a simple sine wave at max amplitude
+                            for (int channel = 0; channel < format.wChannels; channel++)
+                            {
+                                data.shortArray[i + channel] = Convert.ToInt16(amplitude * Math.Sin(separatorAngle * k));
+                                i++;
+                            }
+                        }
+
+                        // blue 
+                        for (uint k = 0; k < (0.146432 * format.dwSamplesPerSec) - 1; k++)
+                        {
+                            // Fill with a simple sine wave at max amplitude
+                            for (int channel = 0; channel < format.wChannels; channel++)
+                            {
+                                data.shortArray[i + channel] = Convert.ToInt16(amplitude * Math.Sin(sampleAngle * k));
+                                i++;
+                            }
+                        }
+                        // separator pulse
+                        for (uint k = 0; k < (0.000572 * format.dwSamplesPerSec) - 1; k++)
+                        {
+                            // Fill with a simple sine wave at max amplitude
+                            for (int channel = 0; channel < format.wChannels; channel++)
+                            {
+                                data.shortArray[i + channel] = Convert.ToInt16(amplitude * Math.Sin(separatorAngle * k));
+                                i++;
+                            }
+                        }
+
+                        // red 
+                        for (uint k = 0; k < (0.146432 * format.dwSamplesPerSec) - 1; k++)
+                        {
+                            // Fill with a simple sine wave at max amplitude
+                            for (int channel = 0; channel < format.wChannels; channel++)
+                            {
+                                try {
+                                    data.shortArray[i + channel] = Convert.ToInt16(amplitude * Math.Sin(sampleAngle * k));
+                                } catch(IndexOutOfRangeException e) {
+                                    //Console.WriteLine("i: " + i + ", channel: " + channel + ", sps: " + format.dwSamplesPerSec);
+                                }
+                                i++;
+                            }
+                        }
+                        // separator pulse
+                        for (uint k = 0; k < (0.000572 * format.dwSamplesPerSec) - 1; k++)
+                        {
+                            // Fill with a simple sine wave at max amplitude
+                            for (int channel = 0; channel < format.wChannels; channel++)
+                            {
+                                data.shortArray[i + channel] = Convert.ToInt16(amplitude * Math.Sin(separatorAngle * k));
+                                i++;
+                            }
+                        }
+
+                        // - 572 - 146432 - 572 - 146432 - 572 - 146432 - 572; //0.441584 * format.dwSamplesPerSec;
+                        
                     }
+
+                    //441.584
+
+                    // for(uint j = 0; j < samples - 1;)
+                    // {
+                    //     for (int channel = 0; channel < format.wChannels; channel++)
+                    //     {
+                    //         data.shortArray[j + channel] = Convert.ToInt16(amplitude * p.s(j, 0.26f * deviation, deviation));
+                    //     }
+                    //     j++;
+                    // }
 
                     data.dwChunkSize = (uint)(data.shortArray.Length * (format.wBitsPerSample / 8));
 

@@ -8,10 +8,16 @@ namespace SSTVWorker;
 internal class Program
 {
     public static Bitmap bitmap;
+    public static float[] brightnessArray;
+    public static int bitmapWidth;
+    public static int bitmapHeight;
     static void Main(string[] args)
     {
         getBitmap();
-        
+        Console.WriteLine("Got Bitmap");
+        getLightArray();
+        Console.WriteLine("Got Light Array\nBeginning calcs...");
+
         WaveGenerator wave = new WaveGenerator(WaveType.Test);
         wave.Save("test.wav");
 
@@ -38,21 +44,20 @@ internal class Program
 
     public static double f(float t, Bitmap bitmap)
     {
-        if(t<0) {
-            return 0;
-        }
-        int x = (int)(t % 256);
-        int y = (int)Math.Round(t / 256);
+        return 1;
+        // if(t<0) {
+        //     return 0;
+        // }
 
-        Color color = new Color();
-        try {
-            color = bitmap.GetPixel(x, y);
-        } catch(ArgumentOutOfRangeException e) {
-            //Console.WriteLine(y);
-        }
+        // int xy = (int)Math.Floor(t);
         
+        // try {
+        //     return brightnessArray[xy];
+        // } catch(IndexOutOfRangeException e) {
+        //     Console.WriteLine(xy);
+        //     return 0;
+        // }
         
-        return color.GetBrightness();
     }
 
     // https://www.andrewhoefling.com/Blog/Post/basic-image-manipulation-in-c-sharp
@@ -69,7 +74,8 @@ internal class Program
         }
     }
 
-    public static void getBitmap() {
+    public static void getBitmap()
+    {
         int martin1Height = 320;
         int martin1Width = 256;
 
@@ -78,6 +84,22 @@ internal class Program
         imageInput.Save(stream, ImageFormat.Jpeg);
 
         bitmap = new Bitmap(Resize(stream.ToArray(), martin1Width, martin1Height));
+    }
+    
+    public static void getLightArray()
+    {
+        bitmapHeight = bitmap.Size.Height;
+        bitmapWidth = bitmap.Size.Width;
+        int bitmapSize = bitmap.Size.Width * bitmap.Size.Height;
+        brightnessArray = new float[bitmap.Size.Width * bitmap.Size.Height];
+
+        for(int i = 0; i < bitmap.Size.Height;) {
+            for(int j = 0; j < bitmap.Size.Width;) {
+                brightnessArray[i] = bitmap.GetPixel(j, i).GetBrightness();
+                j++;
+            }
+            i++;
+        }
     }
 }
 

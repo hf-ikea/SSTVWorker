@@ -45,7 +45,7 @@ namespace Wave_Fun
             dwChunkSize = 16;
             wFormatTag = 1;
             wChannels = 2;
-            dwSamplesPerSec = 44100;
+            dwSamplesPerSec = 1000000;
             wBitsPerSample = 16;
             wBlockAlign = (ushort)(wChannels * (wBitsPerSample / 8));
             dwAvgBytesPerSec = dwSamplesPerSec * wBlockAlign;

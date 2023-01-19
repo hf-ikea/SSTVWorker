@@ -26,8 +26,8 @@ internal class VISGenerate
             for (int channel = 0; channel < channels; channel++)
             {
                 data[i + channel] = Convert.ToInt16(amplitude * Math.Sin(leaderAngle * k));
+                i++;
             }
-            i++;
         }
 
         // for break
@@ -37,8 +37,8 @@ internal class VISGenerate
             for (int channel = 0; channel < channels; channel++)
             {
                 data[i + channel] = Convert.ToInt16(amplitude * Math.Sin(twelveHundredAngle * k));
+                i++;
             }
-            i++;
         }
 
         // for leader
@@ -48,8 +48,8 @@ internal class VISGenerate
             for (int channel = 0; channel < channels; channel++)
             {
                 data[i + channel] = Convert.ToInt16(amplitude * Math.Sin(leaderAngle * k));
+                i++;
             }
-            i++;
         }
 
         // for start
@@ -59,8 +59,8 @@ internal class VISGenerate
             for (int channel = 0; channel < channels; channel++)
             {
                 data[i + channel] = Convert.ToInt16(amplitude * Math.Sin(twelveHundredAngle * k));
+                i++;
             }
-            i++;
         }
 
         int[] visCode = {0, 1, 0, 1, 1, 0, 0};
@@ -73,8 +73,8 @@ internal class VISGenerate
                     for (int channel = 0; channel < channels; channel++)
                     {
                         data[i + channel] = Convert.ToInt16(amplitude * Math.Sin(zeroAngle * k));
+                        i++;
                     }
-                    i++;
                 }
             } else {
                 for (uint k = 0; k < (0.03 * samplesPerSec * channels) - 1; k++)
@@ -83,8 +83,8 @@ internal class VISGenerate
                     for (int channel = 0; channel < channels; channel++)
                     {
                         data[i + channel] = Convert.ToInt16(amplitude * Math.Sin(oneAngle * k));
+                        i++;
                     }
-                    i++;
                 }
             }
         }
@@ -96,8 +96,8 @@ internal class VISGenerate
             for (int channel = 0; channel < channels; channel++)
             {
                 data[i + channel] = Convert.ToInt16(amplitude * Math.Sin(twelveHundredAngle * k));
+                i++;
             }
-            i++;
         }
 
         VISReturn returnValue = new VISReturn();
