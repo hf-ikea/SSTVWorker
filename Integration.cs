@@ -24,7 +24,7 @@ namespace Integration
             for(int i = 0; i < rectNum; i++)
             {
                 cX += dx;
-                double height = f(cX);
+                double height = SSTVWorker.Program.f(cX, SSTVWorker.Program.bitmap);
                 double width = dx;
                 area += height * width;
             }
@@ -40,7 +40,7 @@ namespace Integration
             
             for(int i = 0; i < traNum; i++)
             {
-                area += ((f(cX) + f(cX + dx)) / 2) * dx;
+                area += ((SSTVWorker.Program.f(cX, SSTVWorker.Program.bitmap) + SSTVWorker.Program.f(cX + dx, SSTVWorker.Program.bitmap)) / 2) * dx;
                 cX += dx;
             }
             
@@ -61,25 +61,25 @@ namespace Integration
             float cX = a;
             double area = 0f;
 
-            area += f(cX);
+            area += SSTVWorker.Program.f(cX, SSTVWorker.Program.bitmap);
             cX += dx;
-            area += (4*f(cX));
+            area += (4*SSTVWorker.Program.f(cX, SSTVWorker.Program.bitmap));
             cX += dx;
-            area += (2*f(cX));
+            area += (2*SSTVWorker.Program.f(cX, SSTVWorker.Program.bitmap));
             cX += dx;
 
             num -= 4;
 
             for(int i = 0; i < (num / 2); i ++) {
-                area += (4*f(cX));
+                area += (4*SSTVWorker.Program.f(cX, SSTVWorker.Program.bitmap));
                 cX += dx;
-                area += (2*f(cX));
+                area += (2*SSTVWorker.Program.f(cX, SSTVWorker.Program.bitmap));
                 cX += dx;
             }
 
-            area += (4*f(cX));
+            area += (4*SSTVWorker.Program.f(cX, SSTVWorker.Program.bitmap));
             cX += dx;
-            area += f(cX);
+            area += SSTVWorker.Program.f(cX, SSTVWorker.Program.bitmap);
             cX += dx;
 
             //Console.WriteLine(area);
@@ -121,11 +121,5 @@ namespace Integration
         //     //return x % 2; //MathF.Abs(MathF.Log(x)); // ln(x)
         //     return MathF.Sin(x / 100);
         // }
-
-        public static double f(float t)
-        {
-            double j = (Math.PI * 4) / (44100 * 2);
-            return Math.Sin((t * j));
-        }
     }
 }

@@ -7,19 +7,11 @@ namespace SSTVWorker;
 
 internal class Program
 {
+    public static Bitmap bitmap;
     static void Main(string[] args)
     {
         WaveGenerator wave = new WaveGenerator(WaveType.Test);
         wave.Save("test.wav");
-
-        // int martin1Height = 320;
-        // int martin1Width = 256;
-
-        // MemoryStream stream = new MemoryStream();
-        // Image imageInput = Image.FromFile("test.png");
-        // imageInput.Save(stream, ImageFormat.Jpeg);
-
-        // byte[] resizedImage = Resize(stream.ToArray(), martin1Height, martin1Width);
 
         // int samples = 1000;
         // double[] doubleArray = new double[samples];
@@ -42,8 +34,18 @@ internal class Program
         //return MathF.Cos(j * (2 * MathF.PI * freq * t) + deviation * ((float)Integration.Integrators.LRAMIntegrate(t - 2, t, 10)));
     }
 
+    public static double f(float t, Bitmap bitmap)
+    {
+        int x = (int)(t % 256);
+        int y = (int)Math.Round(t / 256);
+        
+        Color color = bitmap.GetPixel(x, y);
+        
+        return color.GetBrightness();
+    }
+
     // https://www.andrewhoefling.com/Blog/Post/basic-image-manipulation-in-c-sharp
-    public static byte[] Resize(byte[] data, int width, int height)
+    public static Image Resize(byte[] data, int width, int height)
     {
         using (var stream = new MemoryStream(data))
         {
@@ -52,12 +54,19 @@ internal class Program
             //var height = (width * image.Height) / image.Width;
             var thumbnail = image.GetThumbnailImage(width, height, null, IntPtr.Zero);
 
-            using (var thumbnailStream = new MemoryStream())
-            {
-                thumbnail.Save(thumbnailStream, ImageFormat.Jpeg);
-                return thumbnailStream.ToArray();
-            }
+            return thumbnail;
         }
+    }
+
+    public void getBitmap() {
+        int martin1Height = 320;
+        int martin1Width = 256;
+
+        MemoryStream stream = new MemoryStream();
+        Image imageInput = Image.FromFile("test.png");
+        imageInput.Save(stream, ImageFormat.Jpeg);
+
+        Bitmap bitmap = new Bitmap(Resize(stream.ToArray(), martin1Height, martin1Width));
     }
 }
 
