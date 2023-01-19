@@ -10,6 +10,8 @@ internal class Program
     public static Bitmap bitmap;
     static void Main(string[] args)
     {
+        getBitmap();
+        
         WaveGenerator wave = new WaveGenerator(WaveType.Test);
         wave.Save("test.wav");
 
@@ -36,10 +38,19 @@ internal class Program
 
     public static double f(float t, Bitmap bitmap)
     {
+        if(t<0) {
+            return 0;
+        }
         int x = (int)(t % 256);
         int y = (int)Math.Round(t / 256);
+
+        Color color = new Color();
+        try {
+            color = bitmap.GetPixel(x, y);
+        } catch(ArgumentOutOfRangeException e) {
+            //Console.WriteLine(y);
+        }
         
-        Color color = bitmap.GetPixel(x, y);
         
         return color.GetBrightness();
     }
@@ -58,7 +69,7 @@ internal class Program
         }
     }
 
-    public void getBitmap() {
+    public static void getBitmap() {
         int martin1Height = 320;
         int martin1Width = 256;
 
@@ -66,7 +77,7 @@ internal class Program
         Image imageInput = Image.FromFile("test.png");
         imageInput.Save(stream, ImageFormat.Jpeg);
 
-        Bitmap bitmap = new Bitmap(Resize(stream.ToArray(), martin1Height, martin1Width));
+        bitmap = new Bitmap(Resize(stream.ToArray(), martin1Width, martin1Height));
     }
 }
 
