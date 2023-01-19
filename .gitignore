@@ -1,5 +1,6 @@
 bin/
 obj/
+obj
 .vscode
 out.wav
 test.wav
