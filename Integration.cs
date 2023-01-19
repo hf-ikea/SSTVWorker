@@ -17,7 +17,7 @@ namespace Integration
     {
         public static double LRAMIntegrate(float a, float b, int rectNum)
         {
-            float dx = MathF.Abs(a - b) / rectNum;
+            float dx = Math.Abs(a - b) / rectNum;
             float cX = a;
             double area = 0f;
             
@@ -34,7 +34,7 @@ namespace Integration
         
         public static double TrapezoidIntegrate(float a, float b, int traNum)
         {
-            float dx = MathF.Abs(a - b) / traNum;
+            float dx = Math.Abs(a - b) / traNum;
             float cX = a;
             double area = 0f;
             
@@ -57,7 +57,7 @@ namespace Integration
             }
 
             // 1, 4, 2 ...(4, 2)... 4, 1
-            float dx = MathF.Abs(a - b) / num;
+            float dx = Math.Abs(a - b) / num;
             float cX = a;
             double area = 0f;
 
@@ -101,7 +101,7 @@ namespace Integration
             }
 
             // 1, 4, 2 ...(4, 2)... 4, 1
-            float dx = MathF.Abs(a - b) / num;
+            float dx = Math.Abs(a - b) / num;
             float cX = a;
             double area = 0f;
             float h = (b - a) / n;
@@ -125,7 +125,7 @@ namespace Integration
         public static double f(float t)
         {
             double j = (Math.PI * 4) / (44100 * 2);
-            return MathF.Sin((float)(t * j));
+            return Math.Sin((t * j));
         }
     }
 }

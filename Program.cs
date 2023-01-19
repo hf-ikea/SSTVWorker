@@ -37,8 +37,8 @@ internal class Program
     Wave_Fun.WaveFormatChunk format = new Wave_Fun.WaveFormatChunk();
 
     public double s(float t, float freq, float deviation) {
-        float j = (float)((Math.PI * 2 * freq) / (format.dwSamplesPerSec * format.wChannels));
-        return MathF.Cos(j * (2 * MathF.PI * freq * t) + deviation * ((float)Integration.Integrators.CompositeSimpsonsIntegrate(t - 2, t, 10, 4)));
+        double j = ((Math.PI * 2 * freq) / (format.dwSamplesPerSec * format.wChannels));
+        return Math.Cos(j * (2 * Math.PI * freq * t) + deviation * (Integration.Integrators.CompositeSimpsonsIntegrate(t - 2, t, 10, 4)));
         //return MathF.Cos(j * (2 * MathF.PI * freq * t) + deviation * ((float)Integration.Integrators.LRAMIntegrate(t - 2, t, 10)));
     }
 
