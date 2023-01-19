@@ -1,0 +1,90 @@
+// line iterate
+for(uint k = 0; k < 256; k++) {
+    // sync
+    for (uint l = 0; l < (0.04862 * format.dwSamplesPerSec * format.wChannels) - 1; l++)
+    {
+        // Fill with a simple sine wave at max amplitude
+        for (int channel = 0; channel < format.wChannels; channel++)
+        {
+            data.shortArray[i + channel] = Convert.ToInt16(amplitude * Math.Sin(twelveHundredAngle * l));
+        }
+        i++;
+    }
+
+    // separator
+    for (uint l = 0; l < (0.00572 * format.dwSamplesPerSec * format.wChannels) - 1; l++)
+    {
+        // Fill with a simple sine wave at max amplitude
+        for (int channel = 0; channel < format.wChannels; channel++)
+        {
+            data.shortArray[i + channel] = Convert.ToInt16(amplitude * Math.Sin(separatorAngle * l));
+        }
+        i++;
+    }
+
+    // green
+    for (uint l = 0; l < (0.146432 * format.dwSamplesPerSec * format.wChannels) - 1; l++)
+    {
+        // Fill with a simple sine wave at max amplitude
+        for (int channel = 0; channel < format.wChannels; channel++)
+        {
+            data.shortArray[i + channel] = Convert.ToInt16(amplitude * Math.Sin(sampleAngle * l));
+        }
+        i++;
+    }
+    
+    // separator
+    for (uint l = 0; l < (0.00572 * format.dwSamplesPerSec * format.wChannels) - 1; l++)
+    {
+        // Fill with a simple sine wave at max amplitude
+        for (int channel = 0; channel < format.wChannels; channel++)
+        {
+            data.shortArray[i + channel] = Convert.ToInt16(amplitude * Math.Sin(separatorAngle * l));
+        }
+        i++;
+    }
+
+    // blue
+    for (uint l = 0; l < (0.146432 * format.dwSamplesPerSec * format.wChannels) - 1; l++)
+    {
+        // Fill with a simple sine wave at max amplitude
+        for (int channel = 0; channel < format.wChannels; channel++)
+        {
+            data.shortArray[i + channel] = Convert.ToInt16(amplitude * Math.Sin(sampleAngle * l));
+        }
+        i++;
+    }
+    // separator
+    for (uint l = 0; l < (0.00572 * format.dwSamplesPerSec * format.wChannels) - 1; l++)
+    {
+        // Fill with a simple sine wave at max amplitude
+        for (int channel = 0; channel < format.wChannels; channel++)
+        {
+            data.shortArray[i + channel] = Convert.ToInt16(amplitude * Math.Sin(separatorAngle * l));
+        }
+        i++;
+    }
+
+    // red
+    for (uint l = 0; l < (0.146432 * format.dwSamplesPerSec * format.wChannels) - 1; l++)
+    {
+        // Fill with a simple sine wave at max amplitude
+        for (int channel = 0; channel < format.wChannels; channel++)
+        {
+            data.shortArray[i + channel] = Convert.ToInt16(amplitude * Math.Sin(sampleAngle * l));
+        }
+        i++;
+    }
+
+    // separator
+    for (uint l = 0; l < (0.00572 * format.dwSamplesPerSec * format.wChannels) - 1; l++)
+    {
+        // Fill with a simple sine wave at max amplitude
+        for (int channel = 0; channel < format.wChannels; channel++)
+        {
+            data.shortArray[i + channel] = Convert.ToInt16(amplitude * Math.Sin(separatorAngle * l));
+        }
+        i++;
+    }
+    
+}
