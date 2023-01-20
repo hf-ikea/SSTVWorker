@@ -159,7 +159,7 @@ namespace Wave_Fun
                         for (int k = 0; k < (0.146432 * format.dwSamplesPerSec); k++) {
                             for (int channel = 0; channel < format.wChannels; channel++)
                             {
-                                data.shortArray[i + channel] = Convert.ToInt16(amplitude * SSTVWorker.Program.s(k / 457.6, 345f, deviation, "g"));
+                                data.shortArray[i + channel] = Convert.ToInt16(amplitude * SSTVWorker.Program.s(k / 457.6, carrierFreq, deviation, "g"));
                                 i++;
                             }
                         }
@@ -195,7 +195,7 @@ namespace Wave_Fun
                         for (int k = 0; k < (0.146432 * format.dwSamplesPerSec); k++) {
                             for (int channel = 0; channel < format.wChannels; channel++)
                             {
-                                data.shortArray[i + channel] = Convert.ToInt16(amplitude * SSTVWorker.Program.s(k / 457.6, 345f, deviation, "b"));
+                                data.shortArray[i + channel] = Convert.ToInt16(amplitude * SSTVWorker.Program.s(k / 457.6, carrierFreq, deviation, "b"));
                                 i++;
                             }
                         }
@@ -231,7 +231,7 @@ namespace Wave_Fun
                         for (int k = 0; k < (0.146432 * format.dwSamplesPerSec); k++) {
                             for (int channel = 0; channel < format.wChannels; channel++)
                             {
-                                data.shortArray[i + channel] = Convert.ToInt16(amplitude * SSTVWorker.Program.s(k / 457.6, 345f, deviation, "r"));
+                                data.shortArray[i + channel] = Convert.ToInt16(amplitude * SSTVWorker.Program.s(k / 457.6, carrierFreq, deviation, "r"));
                                 i++;
                             }
                         }
