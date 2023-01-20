@@ -135,15 +135,20 @@ namespace Wave_Fun
                         }
                         
                         // green 
-                        for (uint k = 0; k < (0.146432 * format.dwSamplesPerSec); k++)
+                        for(int b = 0; b < 320; b++)
                         {
-                            // Fill with a simple sine wave at max amplitude
-                            for (int channel = 0; channel < format.wChannels; channel++)
+                            //greenAngle = SSTVWorker.Program.ByteToAngle(SSTVWorker.Program.f(b, j, "g"));
+                            for (uint pixSamp = 0; pixSamp < (0.0004576 * format.dwSamplesPerSec); pixSamp++)
                             {
-                                data.shortArray[i + channel] = Convert.ToInt16(amplitude * Math.Sin(greenAngle * k));
-                                i++;
+                                // Fill with a simple sine wave at max amplitude
+                                for (int channel = 0; channel < format.wChannels; channel++)
+                                {
+                                    data.shortArray[i + channel] = Convert.ToInt16(amplitude * Math.Sin(greenAngle * pixSamp * b));
+                                    i++;
+                                }
                             }
                         }
+                        
                         // separator pulse
                         for (uint k = 0; k < (0.000572 * format.dwSamplesPerSec); k++)
                         {
@@ -156,13 +161,17 @@ namespace Wave_Fun
                         }
 
                         // blue 
-                        for (uint k = 0; k < (0.146432 * format.dwSamplesPerSec); k++)
+                        for(int b = 0; b < 320; b++)
                         {
-                            // Fill with a simple sine wave at max amplitude
-                            for (int channel = 0; channel < format.wChannels; channel++)
+                            //blueAngle = SSTVWorker.Program.ByteToAngle(SSTVWorker.Program.f(b, j, "b"));
+                            for (uint pixSamp = 0; pixSamp < (0.0004576 * format.dwSamplesPerSec); pixSamp++)
                             {
-                                data.shortArray[i + channel] = Convert.ToInt16(amplitude * Math.Sin(blueAngle * k));
-                                i++;
+                                // Fill with a simple sine wave at max amplitude
+                                for (int channel = 0; channel < format.wChannels; channel++)
+                                {
+                                    data.shortArray[i + channel] = Convert.ToInt16(amplitude * Math.Sin(blueAngle * pixSamp * b));
+                                    i++;
+                                }
                             }
                         }
                         // separator pulse
@@ -177,13 +186,17 @@ namespace Wave_Fun
                         }
 
                         // red 
-                        for (uint k = 0; k < (0.146432 * format.dwSamplesPerSec); k++)
+                        for(int b = 0; b < 320; b++)
                         {
-                            // Fill with a simple sine wave at max amplitude
-                            for (int channel = 0; channel < format.wChannels; channel++)
+                            //blueAngle = SSTVWorker.Program.ByteToAngle(SSTVWorker.Program.f(b, j, "r"));
+                            for (uint pixSamp = 0; pixSamp < (0.0004576 * format.dwSamplesPerSec); pixSamp++)
                             {
-                                data.shortArray[i + channel] = Convert.ToInt16(amplitude * Math.Sin(redAngle * k));
-                                i++;
+                                // Fill with a simple sine wave at max amplitude
+                                for (int channel = 0; channel < format.wChannels; channel++)
+                                {
+                                    data.shortArray[i + channel] = Convert.ToInt16(amplitude * Math.Sin(blueAngle * pixSamp * b));
+                                    i++;
+                                }
                             }
                         }
                         // separator pulse

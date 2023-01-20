@@ -24,7 +24,7 @@ namespace Integration
             for(int i = 0; i < rectNum; i++)
             {
                 cX += dx;
-                double height = SSTVWorker.Program.f(cX, SSTVWorker.Program.bitmap);
+                double height = f(cX);
                 double width = dx;
                 area += height * width;
             }
@@ -40,7 +40,7 @@ namespace Integration
             
             for(int i = 0; i < traNum; i++)
             {
-                area += ((SSTVWorker.Program.f(cX, SSTVWorker.Program.bitmap) + SSTVWorker.Program.f(cX + dx, SSTVWorker.Program.bitmap)) / 2) * dx;
+                area += (f(cX) + f(cX + dx) / 2) * dx;
                 cX += dx;
             }
             
@@ -61,25 +61,25 @@ namespace Integration
             float cX = a;
             double area = 0f;
 
-            area += SSTVWorker.Program.f(cX, SSTVWorker.Program.bitmap);
+            area += f(cX);
             cX += dx;
-            area += (4*SSTVWorker.Program.f(cX, SSTVWorker.Program.bitmap));
+            area += (4*f(cX));
             cX += dx;
-            area += (2*SSTVWorker.Program.f(cX, SSTVWorker.Program.bitmap));
+            area += (2*f(cX));
             cX += dx;
 
             num -= 4;
 
             for(int i = 0; i < (num / 2); i ++) {
-                area += (4*SSTVWorker.Program.f(cX, SSTVWorker.Program.bitmap));
+                area += (4*f(cX));
                 cX += dx;
-                area += (2*SSTVWorker.Program.f(cX, SSTVWorker.Program.bitmap));
+                area += (2*f(cX));
                 cX += dx;
             }
 
-            area += (4*SSTVWorker.Program.f(cX, SSTVWorker.Program.bitmap));
+            area += (4*f(cX));
             cX += dx;
-            area += SSTVWorker.Program.f(cX, SSTVWorker.Program.bitmap);
+            area += f(cX);
             cX += dx;
 
             //Console.WriteLine(area);
@@ -114,12 +114,12 @@ namespace Integration
             return area;
         }
         
-        // public static double f(float x)
-        // {
-        //     //double yabbadabbadoo = MathF.Abs(MathF.Round(MathF.Sin(x)));//MathF.Abs(MathF.Round(MathF.Sin(x * 2) + 0.5f));
-        //     //Console.WriteLine(yabbadabbadoo);
-        //     //return x % 2; //MathF.Abs(MathF.Log(x)); // ln(x)
-        //     return MathF.Sin(x / 100);
-        // }
+        public static double f(float x)
+        {
+            //double yabbadabbadoo = MathF.Abs(MathF.Round(MathF.Sin(x)));//MathF.Abs(MathF.Round(MathF.Sin(x * 2) + 0.5f));
+            //Console.WriteLine(yabbadabbadoo);
+            //return x % 2; //MathF.Abs(MathF.Log(x)); // ln(x)
+            return MathF.Sin(x / 100);
+        }
     }
 }

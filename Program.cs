@@ -8,14 +8,16 @@ namespace SSTVWorker;
 internal class Program
 {
     public static Bitmap bitmap;
-    public static float[] brightnessArray;
+    public static int[] redArray;
+    public static int[] greenArray;
+    public static int[] blueArray;
     public static int bitmapWidth;
     public static int bitmapHeight;
     static void Main(string[] args)
     {
         getBitmap();
         Console.WriteLine("Got Bitmap");
-        getLightArray();
+        getColorArray();
         Console.WriteLine("Got Light Array\nBeginning calcs...");
 
         WaveGenerator wave = new WaveGenerator(WaveType.Test);
@@ -36,28 +38,43 @@ internal class Program
 
     static Wave_Fun.WaveFormatChunk format = new Wave_Fun.WaveFormatChunk();
 
-    public double s(float t, float freq, float deviation) {
-        double j = ((Math.PI * 2 * freq) / (format.dwSamplesPerSec * format.wChannels));
-        return Math.Cos(j * (2 * Math.PI * freq * t) + deviation * (Integration.Integrators.CompositeSimpsonsIntegrate(t - 2, t, 10, 4)));
-        //return MathF.Cos(j * (2 * MathF.PI * freq * t) + deviation * ((float)Integration.Integrators.LRAMIntegrate(t - 2, t, 10)));
-    }
+    // public double s(float t, float freq, float deviation) {
+    //     double j = ((Math.PI * 2 * freq) / (format.dwSamplesPerSec * format.wChannels));
+    //     return Math.Cos(j * (2 * Math.PI * freq * t) + deviation * (Integration.Integrators.CompositeSimpsonsIntegrate(t - 2, t, 10, 4)));
+    //     //return MathF.Cos(j * (2 * MathF.PI * freq * t) + deviation * ((float)Integration.Integrators.LRAMIntegrate(t - 2, t, 10)));
+    // }
 
-    public static double f(float t, Bitmap bitmap)
+    public static int f(int x, int y, string color)
     {
-        return 1;
-        // if(t<0) {
-        //     return 0;
-        // }
+        if(x < 0) {
+            return 0;
+        }
 
-        // int xy = (int)Math.Floor(t);
-        
-        // try {
-        //     return brightnessArray[xy];
-        // } catch(IndexOutOfRangeException e) {
-        //     Console.WriteLine(xy);
-        //     return 0;
-        // }
-        
+        int xy = x * y;
+        switch(color){
+            case "r":
+                try {
+                    return redArray[xy];
+                } catch(IndexOutOfRangeException e) {
+                    Console.WriteLine(e);
+                    return 0;
+                }
+            case "g":
+                try {
+                    return greenArray[xy];
+                } catch(IndexOutOfRangeException e) {
+                    Console.WriteLine(e);
+                    return 0;
+                }
+            case "b":
+                try {
+                    return blueArray[xy];
+                } catch(IndexOutOfRangeException e) {
+                    Console.WriteLine(e);
+                    return 0;
+                }
+        }
+        return 0;
     }
 
     // https://www.andrewhoefling.com/Blog/Post/basic-image-manipulation-in-c-sharp
@@ -86,16 +103,22 @@ internal class Program
         bitmap = new Bitmap(Resize(stream.ToArray(), martin1Width, martin1Height));
     }
     
-    public static void getLightArray()
+    public static void getColorArray()
     {
         bitmapHeight = bitmap.Size.Height;
         bitmapWidth = bitmap.Size.Width;
         int bitmapSize = bitmap.Size.Width * bitmap.Size.Height;
-        brightnessArray = new float[bitmap.Size.Width * bitmap.Size.Height];
+
+        redArray = new int[bitmap.Size.Width * bitmap.Size.Height];
+        greenArray = new int[bitmap.Size.Width * bitmap.Size.Height];
+        blueArray = new int[bitmap.Size.Width * bitmap.Size.Height];
 
         for(int i = 0; i < bitmap.Size.Height;) {
             for(int j = 0; j < bitmap.Size.Width;) {
-                brightnessArray[i] = bitmap.GetPixel(j, i).GetBrightness();
+                Color color = bitmap.GetPixel(j, i);
+                redArray[i] = color.R;
+                greenArray[i] = color.G;
+                blueArray[i] = color.B;
                 j++;
             }
             i++;
@@ -104,7 +127,7 @@ internal class Program
 
     public static double[] RGBtoAngle(int red, int green, int blue)
     {
-        if(red > 255 || green > 255 || blue > 255)
+        if(red > 256 || green > 256 || blue > 256)
         {
             return new double[0];
         }
@@ -123,6 +146,18 @@ internal class Program
 
         return returnVal;
     }
+
+    public static double ByteToAngle(int num)
+    {
+        if(num > 256)
+        {
+            return 0;
+        }
+        float freq = num * 3.125f + 1500f;
+
+        return (Math.PI * 2 * freq) / (format.dwSamplesPerSec);
+    }
+
 }
 
 class WriteAllText
