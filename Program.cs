@@ -22,6 +22,7 @@ internal class Program
 
         WaveGenerator wave = new WaveGenerator(WaveType.Test);
         wave.Save("test.wav");
+        bitmap.Save("image.png", ImageFormat.Png);
 
         // int samples = 1000;
         // double[] doubleArray = new double[samples];
@@ -38,19 +39,18 @@ internal class Program
 
     static Wave_Fun.WaveFormatChunk format = new Wave_Fun.WaveFormatChunk();
 
-    // public double s(float t, float freq, float deviation) {
-    //     double j = ((Math.PI * 2 * freq) / (format.dwSamplesPerSec * format.wChannels));
-    //     return Math.Cos(j * (2 * Math.PI * freq * t) + deviation * (Integration.Integrators.CompositeSimpsonsIntegrate(t - 2, t, 10, 4)));
-    //     //return MathF.Cos(j * (2 * MathF.PI * freq * t) + deviation * ((float)Integration.Integrators.LRAMIntegrate(t - 2, t, 10)));
-    // }
+    public static double s(double t, double carrier, double deviation, string color) {
+        double j = ((Math.PI * 2 * carrier) / (format.dwSamplesPerSec));
+        return Math.Cos(j * (2 * Math.PI * carrier * t) + (deviation * (Integration.Integrators.CompositeSimpsonsIntegrate(t - 2, t, 10, 4, color))));
+        //return MathF.Cos(j * (2 * MathF.PI * freq * t) + deviation * ((float)Integration.Integrators.LRAMIntegrate(t - 2, t, 10)));
+    }
 
-    public static int f(int x, int y, string color)
+    public static int getColor(int xy, string color)
     {
-        if(x < 0) {
+        if(xy < 0) {
             return 0;
         }
 
-        int xy = x * y;
         switch(color){
             case "r":
                 try {
@@ -77,6 +77,11 @@ internal class Program
         return 0;
     }
 
+    public static double sin(double angle, double t)
+    {
+        return Math.Sin(angle * t);
+    }
+
     // https://www.andrewhoefling.com/Blog/Post/basic-image-manipulation-in-c-sharp
     public static Image Resize(byte[] data, int width, int height)
     {
@@ -93,8 +98,8 @@ internal class Program
 
     public static void getBitmap()
     {
-        int martin1Height = 320;
-        int martin1Width = 256;
+        int martin1Height = 256;
+        int martin1Width = 320;
 
         MemoryStream stream = new MemoryStream();
         Image imageInput = Image.FromFile("test.png");
@@ -113,15 +118,13 @@ internal class Program
         greenArray = new int[bitmap.Size.Width * bitmap.Size.Height];
         blueArray = new int[bitmap.Size.Width * bitmap.Size.Height];
 
-        for(int i = 0; i < bitmap.Size.Height;) {
-            for(int j = 0; j < bitmap.Size.Width;) {
+        for(int i = 0; i < bitmap.Size.Height; i++) {
+            for(int j = 0; j < bitmap.Size.Width; j++) {
                 Color color = bitmap.GetPixel(j, i);
-                redArray[i] = color.R;
-                greenArray[i] = color.G;
-                blueArray[i] = color.B;
-                j++;
+                redArray[i * j] = color.R;
+                greenArray[i * j] = color.G;
+                blueArray[i * j] = color.B;
             }
-            i++;
         }
     }
 

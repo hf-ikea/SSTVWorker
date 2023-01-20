@@ -87,8 +87,9 @@ namespace Wave_Fun
                     uint samples = format.dwSamplesPerSec * format.wChannels * 120; // 228456448
 
                     data.shortArray = new short[samples];
-                    //float deviation = 50;
-                    int pixelPerLine = SSTVWorker.Program.bitmapWidth;
+                    float deviation = 50f;
+                    float carrierFreq = 345f;
+                    int pixelPerLine = 320;
                     int lines = 256; //SSTVWorker.Program.bitmapHeight;
 
                     Program p = new Program();
@@ -100,6 +101,8 @@ namespace Wave_Fun
                     double greenAngle         = angles[1];
                     double blueAngle          = angles[2];
 
+                    int[] messageSignal = new int[pixelPerLine * 458];
+
                     // VIS Code
                     data.shortArray = new short[samples];
 
@@ -108,6 +111,7 @@ namespace Wave_Fun
                     data.shortArray = returnValue.data;
                     int i = returnValue.i;
                     // End VIS Code
+                    int temp = 0;
 
                     for (int j = 0; j < lines - 1; j++){
                         Console.WriteLine("i: " + i);
@@ -133,21 +137,33 @@ namespace Wave_Fun
                                 i++;
                             }
                         }
-                        
+
                         // green 
-                        for(int b = 0; b < 320; b++)
+                        for(int b = 0; b < pixelPerLine; b++)
                         {
-                            //greenAngle = SSTVWorker.Program.ByteToAngle(SSTVWorker.Program.f(b, j, "g"));
-                            for (uint pixSamp = 0; pixSamp < (0.0004576 * format.dwSamplesPerSec); pixSamp++)
+                            messageSignal[b] = SSTVWorker.Program.getColor(b * j, "g");
+                            // greenAngle = SSTVWorker.Program.ByteToAngle(SSTVWorker.Program.getColor(b * j, "g"));
+
+                            // for (int pixSamp = 0; pixSamp < ((0.146432 / pixelPerLine) * format.dwSamplesPerSec); pixSamp++)
+                            // {
+                            //     temp++;
+                            //     int k = pixSamp * b;
+                            //     // Fill with a simple sine wave at max amplitude
+                            //     for (int channel = 0; channel < format.wChannels; channel++)
+                            //     {
+                            //         //data.shortArray[i + channel] = Convert.ToInt16(amplitude * Math.Sin(greenAngle * temp));
+                            //         i++;
+                            //     }
+                            // }
+                        }
+                        for (int k = 0; k < (0.146432 * format.dwSamplesPerSec); k++) {
+                            for (int channel = 0; channel < format.wChannels; channel++)
                             {
-                                // Fill with a simple sine wave at max amplitude
-                                for (int channel = 0; channel < format.wChannels; channel++)
-                                {
-                                    data.shortArray[i + channel] = Convert.ToInt16(amplitude * Math.Sin(greenAngle * pixSamp * b));
-                                    i++;
-                                }
+                                data.shortArray[i + channel] = Convert.ToInt16(amplitude * SSTVWorker.Program.s(k / 457.6, 345f, deviation, "g"));
+                                i++;
                             }
                         }
+                        temp = 0;
                         
                         // separator pulse
                         for (uint k = 0; k < (0.000572 * format.dwSamplesPerSec); k++)
@@ -161,19 +177,30 @@ namespace Wave_Fun
                         }
 
                         // blue 
-                        for(int b = 0; b < 320; b++)
+                        for(int b = 0; b < pixelPerLine; b++)
                         {
-                            //blueAngle = SSTVWorker.Program.ByteToAngle(SSTVWorker.Program.f(b, j, "b"));
-                            for (uint pixSamp = 0; pixSamp < (0.0004576 * format.dwSamplesPerSec); pixSamp++)
+                            messageSignal[b] = SSTVWorker.Program.getColor(b * j, "b");
+                            // blueAngle = SSTVWorker.Program.ByteToAngle(SSTVWorker.Program.getColor(b * j, "b"));
+                            // for (uint pixSamp = 0; pixSamp < (0.0004576 * format.dwSamplesPerSec); pixSamp++)
+                            // {
+                            //     temp++;
+                            //     // Fill with a simple sine wave at max amplitude
+                            //     for (int channel = 0; channel < format.wChannels; channel++)
+                            //     {
+                            //         data.shortArray[i + channel] = Convert.ToInt16(amplitude * Math.Sin(blueAngle * temp));
+                            //         i++;
+                            //     }
+                            // }
+                        }
+                        for (int k = 0; k < (0.146432 * format.dwSamplesPerSec); k++) {
+                            for (int channel = 0; channel < format.wChannels; channel++)
                             {
-                                // Fill with a simple sine wave at max amplitude
-                                for (int channel = 0; channel < format.wChannels; channel++)
-                                {
-                                    data.shortArray[i + channel] = Convert.ToInt16(amplitude * Math.Sin(blueAngle * pixSamp * b));
-                                    i++;
-                                }
+                                data.shortArray[i + channel] = Convert.ToInt16(amplitude * SSTVWorker.Program.s(k / 457.6, 345f, deviation, "b"));
+                                i++;
                             }
                         }
+                        temp = 0;
+
                         // separator pulse
                         for (uint k = 0; k < (0.000572 * format.dwSamplesPerSec); k++)
                         {
@@ -186,19 +213,29 @@ namespace Wave_Fun
                         }
 
                         // red 
-                        for(int b = 0; b < 320; b++)
+                        for(int b = 0; b < pixelPerLine; b++)
                         {
-                            //blueAngle = SSTVWorker.Program.ByteToAngle(SSTVWorker.Program.f(b, j, "r"));
-                            for (uint pixSamp = 0; pixSamp < (0.0004576 * format.dwSamplesPerSec); pixSamp++)
+                            messageSignal[b] = SSTVWorker.Program.getColor(b * j, "r");
+                            // blueAngle = SSTVWorker.Program.ByteToAngle(SSTVWorker.Program.getColor(b * j, "r"));
+                            // for (uint pixSamp = 0; pixSamp < (0.0004576 * format.dwSamplesPerSec); pixSamp++)
+                            // {
+                            //     temp++;
+                            //     // Fill with a simple sine wave at max amplitude
+                            //     for (int channel = 0; channel < format.wChannels; channel++)
+                            //     {
+                            //         data.shortArray[i + channel] = Convert.ToInt16(amplitude * Math.Sin(blueAngle * temp));
+                            //         i++;
+                            //     }
+                            // }
+                        }
+                        for (int k = 0; k < (0.146432 * format.dwSamplesPerSec); k++) {
+                            for (int channel = 0; channel < format.wChannels; channel++)
                             {
-                                // Fill with a simple sine wave at max amplitude
-                                for (int channel = 0; channel < format.wChannels; channel++)
-                                {
-                                    data.shortArray[i + channel] = Convert.ToInt16(amplitude * Math.Sin(blueAngle * pixSamp * b));
-                                    i++;
-                                }
+                                data.shortArray[i + channel] = Convert.ToInt16(amplitude * SSTVWorker.Program.s(k / 457.6, 345f, deviation, "r"));
+                                i++;
                             }
                         }
+                        temp = 0;
                         // separator pulse
                         for (uint k = 0; k < (0.000572 * format.dwSamplesPerSec); k++)
                         {

@@ -15,16 +15,16 @@ namespace Integration
 {
     public class Integrators
     {
-        public static double LRAMIntegrate(float a, float b, int rectNum)
+        public static double LRAMIntegrate(double a, double b, int rectNum)
         {
-            float dx = Math.Abs(a - b) / rectNum;
-            float cX = a;
+            double dx = Math.Abs(a - b) / rectNum;
+            double cX = a;
             double area = 0f;
             
             for(int i = 0; i < rectNum; i++)
             {
                 cX += dx;
-                double height = f(cX);
+                double height = m(cX);
                 double width = dx;
                 area += height * width;
             }
@@ -32,22 +32,22 @@ namespace Integration
             return area;
         }
         
-        public static double TrapezoidIntegrate(float a, float b, int traNum)
+        public static double TrapezoidIntegrate(double a, double b, int traNum)
         {
-            float dx = Math.Abs(a - b) / traNum;
-            float cX = a;
+            double dx = Math.Abs(a - b) / traNum;
+            double cX = a;
             double area = 0f;
             
             for(int i = 0; i < traNum; i++)
             {
-                area += (f(cX) + f(cX + dx) / 2) * dx;
+                area += (m(cX) + m(cX + dx) / 2) * dx;
                 cX += dx;
             }
             
             return area;
         }
         
-        public static double SimpsonsIntegrate(float a, float b, int num)
+        public static double SimpsonsIntegrate(double a, double b, int num, string color)
         {
             // this is simpsons 1/3 rule
 
@@ -57,29 +57,29 @@ namespace Integration
             }
 
             // 1, 4, 2 ...(4, 2)... 4, 1
-            float dx = Math.Abs(a - b) / num;
-            float cX = a;
+            double dx = Math.Abs(a - b) / num;
+            double cX = a;
             double area = 0f;
 
-            area += f(cX);
+            area += m(cX, color);
             cX += dx;
-            area += (4*f(cX));
+            area += (4*m(cX, color));
             cX += dx;
-            area += (2*f(cX));
+            area += (2*m(cX, color));
             cX += dx;
 
             num -= 4;
 
             for(int i = 0; i < (num / 2); i ++) {
-                area += (4*f(cX));
+                area += (4*m(cX, color));
                 cX += dx;
-                area += (2*f(cX));
+                area += (2*m(cX, color));
                 cX += dx;
             }
 
-            area += (4*f(cX));
+            area += (4*m(cX, color));
             cX += dx;
-            area += f(cX);
+            area += m(cX, color);
             cX += dx;
 
             //Console.WriteLine(area);
@@ -89,7 +89,7 @@ namespace Integration
             return area;
         }
 
-        public static double CompositeSimpsonsIntegrate(float a, float b, int num, int n)
+        public static double CompositeSimpsonsIntegrate(double a, double b, int num, int n, string color)
         {
             // this is composite simpsons 1/3 rule
 
@@ -101,25 +101,26 @@ namespace Integration
             }
 
             // 1, 4, 2 ...(4, 2)... 4, 1
-            float dx = Math.Abs(a - b) / num;
-            float cX = a;
+            double dx = Math.Abs(a - b) / num;
+            double cX = a;
             double area = 0f;
-            float h = (b - a) / n;
+            double h = (b - a) / n;
 
             for(int i = 0; i < n;) {
-                area += SimpsonsIntegrate(a + (i*h), a + ((i+1)*h), num);
+                area += SimpsonsIntegrate(a + (i*h), a + ((i+1)*h), num, color);
                 i++;
             }
 
             return area;
         }
         
-        public static double f(float x)
+        public static double m(double xy, string color)
         {
-            //double yabbadabbadoo = MathF.Abs(MathF.Round(MathF.Sin(x)));//MathF.Abs(MathF.Round(MathF.Sin(x * 2) + 0.5f));
-            //Console.WriteLine(yabbadabbadoo);
-            //return x % 2; //MathF.Abs(MathF.Log(x)); // ln(x)
-            return MathF.Sin(x / 100);
+            return SSTVWorker.Program.getColor((int)Math.Floor(xy), color) / 256; // SSTVWorker.Program.f(xy, color);
+        }
+        public static double m(double xy)
+        {
+            return SSTVWorker.Program.getColor((int)Math.Floor(xy), "g") / 256; // SSTVWorker.Program.f(xy, color);
         }
     }
 }
