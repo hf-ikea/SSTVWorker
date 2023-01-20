@@ -14,13 +14,13 @@ internal class VISGenerate
         short[] data = new short[samples];
         int i = 0;
 
-        double leaderAngle = (Math.PI * 2 * 1900.0f) / (samplesPerSec * channels);
-        double twelveHundredAngle = (Math.PI * 2 * 1200.0f) / (samplesPerSec * channels);
-        double oneAngle = (Math.PI * 2 * 1100.0f) / (samplesPerSec * channels);
-        double zeroAngle = (Math.PI * 2 * 1300.0f) / (samplesPerSec * channels);
+        double leaderAngle = (Math.PI * 2 * 1900.0f) / (samplesPerSec);
+        double twelveHundredAngle = (Math.PI * 2 * 1200.0f) / (samplesPerSec);
+        double oneAngle = (Math.PI * 2 * 1100.0f) / (samplesPerSec);
+        double zeroAngle = (Math.PI * 2 * 1300.0f) / (samplesPerSec);
 
         // for leader
-        for (uint k = 0; k < (0.3 * samplesPerSec * channels) - 1; k++)
+        for (uint k = 0; k < (0.3 * samplesPerSec); k++)
         {
             // Fill with a simple sine wave at max amplitude
             for (int channel = 0; channel < channels; channel++)
@@ -31,7 +31,7 @@ internal class VISGenerate
         }
 
         // for break
-        for (uint k = 0; k < (0.03 * samplesPerSec * channels) - 1; k++)
+        for (uint k = 0; k < (0.03 * samplesPerSec); k++)
         {
             // Fill with a simple sine wave at max amplitude
             for (int channel = 0; channel < channels; channel++)
@@ -42,7 +42,7 @@ internal class VISGenerate
         }
 
         // for leader
-        for (uint k = 0; k < (0.3 * samplesPerSec * channels) - 1; k++)
+        for (uint k = 0; k < (0.3 * samplesPerSec); k++)
         {
             // Fill with a simple sine wave at max amplitude
             for (int channel = 0; channel < channels; channel++)
@@ -53,7 +53,7 @@ internal class VISGenerate
         }
 
         // for start
-        for (uint k = 0; k < (0.03 * samplesPerSec * channels) - 1; k++)
+        for (uint k = 0; k < (0.03 * samplesPerSec); k++)
         {
             // Fill with a simple sine wave at max amplitude
             for (int channel = 0; channel < channels; channel++)
@@ -67,7 +67,7 @@ internal class VISGenerate
 
         foreach(int bit in visCode) {
             if (bit == 0) {
-                for (uint k = 0; k < (0.03 * samplesPerSec * channels) - 1; k++)
+                for (uint k = 0; k < (0.03 * samplesPerSec); k++)
                 {
                     // Fill with a simple sine wave at max amplitude
                     for (int channel = 0; channel < channels; channel++)
@@ -77,7 +77,7 @@ internal class VISGenerate
                     }
                 }
             } else {
-                for (uint k = 0; k < (0.03 * samplesPerSec * channels) - 1; k++)
+                for (uint k = 0; k < (0.03 * samplesPerSec); k++)
                 {
                     // Fill with a simple sine wave at max amplitude
                     for (int channel = 0; channel < channels; channel++)
@@ -90,7 +90,7 @@ internal class VISGenerate
         }
 
         // for stop
-        for (uint k = 0; k < (0.03 * samplesPerSec * channels) - 1; k++)
+        for (uint k = 0; k < (0.03 * samplesPerSec); k++)
         {
             // Fill with a simple sine wave at max amplitude
             for (int channel = 0; channel < channels; channel++)

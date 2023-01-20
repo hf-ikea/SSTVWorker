@@ -84,34 +84,47 @@ namespace Wave_Fun
                     
                     break;
                 case WaveType.Test:
-                    uint samples = format.dwSamplesPerSec * format.wChannels * 140; // 228456448
+                    uint samples = format.dwSamplesPerSec * format.wChannels * 120; // 228456448
 
                     data.shortArray = new short[samples];
-                    float deviation = 50;
-                    int i = 0;
+                    //float deviation = 50;
                     int pixelPerLine = SSTVWorker.Program.bitmapWidth;
-                    int lines = SSTVWorker.Program.bitmapHeight;
+                    int lines = 256; //SSTVWorker.Program.bitmapHeight;
 
                     Program p = new Program();
+                    double[] angles = SSTVWorker.Program.RGBtoAngle(204, 136, 153);
 
-                    double twelveHundredAngle = (Math.PI * 2 * 1200.0f) / (format.dwSamplesPerSec * format.wChannels);
-                    double separatorAngle = (Math.PI * 2 * 1500.0f) / (format.dwSamplesPerSec * format.wChannels);
-                    double sampleAngle = (Math.PI * 2 * 2300.0f) / (format.dwSamplesPerSec * format.wChannels);
+                    double twelveHundredAngle = (Math.PI * 2 * 1200.0f) / (format.dwSamplesPerSec);  // * format.wChannels);
+                    double separatorAngle     = (Math.PI * 2 * 1500.0f) / (format.dwSamplesPerSec);  // * format.wChannels);
+                    double redAngle           = angles[0];
+                    double greenAngle         = angles[1];
+                    double blueAngle          = angles[2];
 
-                    for (int j = 0; j < lines; j++){
+                    // VIS Code
+                    data.shortArray = new short[samples];
+
+                    VISGenerate.VISReturn returnValue = VISGenerate.VISGenerator(samples, format.dwSamplesPerSec, format.wChannels, amplitude);
+
+                    data.shortArray = returnValue.data;
+                    int i = returnValue.i;
+                    // End VIS Code
+
+                    for (int j = 0; j < lines - 1; j++){
+                        Console.WriteLine("i: " + i);
                         // sync pulse
-                        for (int k = 0; k < (0.004862 * format.dwSamplesPerSec) - 1; k++) //(0.004862 * format.dwSamplesPerSec * format.wChannels)
+                        for (int k = 0; k < (0.004862 * format.dwSamplesPerSec); k++)
                         {
+                            short stuff = Convert.ToInt16(amplitude * Math.Sin(twelveHundredAngle * k));
                             // Fill with a simple sine wave at max amplitude
                             for (int channel = 0; channel < format.wChannels; channel++)
                             {
-                                data.shortArray[i + channel] = Convert.ToInt16(amplitude * Math.Sin(twelveHundredAngle * k));
+                                data.shortArray[i + channel] = stuff;
                                 i++;
                             }
                         }
                         
                         // separator pulse
-                        for (uint k = 0; k < (0.000572 * format.dwSamplesPerSec) - 1; k++)
+                        for (uint k = 0; k < (0.000572 * format.dwSamplesPerSec); k++)
                         {
                             // Fill with a simple sine wave at max amplitude
                             for (int channel = 0; channel < format.wChannels; channel++)
@@ -122,21 +135,17 @@ namespace Wave_Fun
                         }
                         
                         // green 
-                        for (uint k = 0; k < (0.146432 * format.dwSamplesPerSec) - 1; k++)
+                        for (uint k = 0; k < (0.146432 * format.dwSamplesPerSec); k++)
                         {
-                            Console.WriteLine("k: " + k + ", i: " + i);
                             // Fill with a simple sine wave at max amplitude
                             for (int channel = 0; channel < format.wChannels; channel++)
                             {
-                                data.shortArray[i + channel] = Convert.ToInt16(amplitude * Math.Sin(sampleAngle * k));
+                                data.shortArray[i + channel] = Convert.ToInt16(amplitude * Math.Sin(greenAngle * k));
                                 i++;
                             }
                         }
-                        for (int ab = 0; ab < 10000; ab++){
-                            Console.WriteLine("synced");
-                        }
                         // separator pulse
-                        for (uint k = 0; k < (0.000572 * format.dwSamplesPerSec) - 1; k++)
+                        for (uint k = 0; k < (0.000572 * format.dwSamplesPerSec); k++)
                         {
                             // Fill with a simple sine wave at max amplitude
                             for (int channel = 0; channel < format.wChannels; channel++)
@@ -147,17 +156,17 @@ namespace Wave_Fun
                         }
 
                         // blue 
-                        for (uint k = 0; k < (0.146432 * format.dwSamplesPerSec) - 1; k++)
+                        for (uint k = 0; k < (0.146432 * format.dwSamplesPerSec); k++)
                         {
                             // Fill with a simple sine wave at max amplitude
                             for (int channel = 0; channel < format.wChannels; channel++)
                             {
-                                data.shortArray[i + channel] = Convert.ToInt16(amplitude * Math.Sin(sampleAngle * k));
+                                data.shortArray[i + channel] = Convert.ToInt16(amplitude * Math.Sin(blueAngle * k));
                                 i++;
                             }
                         }
                         // separator pulse
-                        for (uint k = 0; k < (0.000572 * format.dwSamplesPerSec) - 1; k++)
+                        for (uint k = 0; k < (0.000572 * format.dwSamplesPerSec); k++)
                         {
                             // Fill with a simple sine wave at max amplitude
                             for (int channel = 0; channel < format.wChannels; channel++)
@@ -168,21 +177,17 @@ namespace Wave_Fun
                         }
 
                         // red 
-                        for (uint k = 0; k < (0.146432 * format.dwSamplesPerSec) - 1; k++)
+                        for (uint k = 0; k < (0.146432 * format.dwSamplesPerSec); k++)
                         {
                             // Fill with a simple sine wave at max amplitude
                             for (int channel = 0; channel < format.wChannels; channel++)
                             {
-                                try {
-                                    data.shortArray[i + channel] = Convert.ToInt16(amplitude * Math.Sin(sampleAngle * k));
-                                } catch(IndexOutOfRangeException e) {
-                                    //Console.WriteLine("i: " + i + ", channel: " + channel + ", sps: " + format.dwSamplesPerSec);
-                                }
+                                data.shortArray[i + channel] = Convert.ToInt16(amplitude * Math.Sin(redAngle * k));
                                 i++;
                             }
                         }
                         // separator pulse
-                        for (uint k = 0; k < (0.000572 * format.dwSamplesPerSec) - 1; k++)
+                        for (uint k = 0; k < (0.000572 * format.dwSamplesPerSec); k++)
                         {
                             // Fill with a simple sine wave at max amplitude
                             for (int channel = 0; channel < format.wChannels; channel++)
@@ -191,8 +196,8 @@ namespace Wave_Fun
                                 i++;
                             }
                         }
-
-                        // - 572 - 146432 - 572 - 146432 - 572 - 146432 - 572; //0.441584 * format.dwSamplesPerSec;
+                        i += 892892 - 9724 - 1144 - 292864 - 1144 - 292864 - 1144 - 292864 - 1144;
+                        //            9724 - 1144 - 292864 - 1144 - 292864 - 1144 - 292864 - 1144; //892892 samples total
                         
                     }
 

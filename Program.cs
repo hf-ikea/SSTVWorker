@@ -34,7 +34,7 @@ internal class Program
         // WriteAllText.WriteText(text).Wait();
     }
 
-    Wave_Fun.WaveFormatChunk format = new Wave_Fun.WaveFormatChunk();
+    static Wave_Fun.WaveFormatChunk format = new Wave_Fun.WaveFormatChunk();
 
     public double s(float t, float freq, float deviation) {
         double j = ((Math.PI * 2 * freq) / (format.dwSamplesPerSec * format.wChannels));
@@ -100,6 +100,28 @@ internal class Program
             }
             i++;
         }
+    }
+
+    public static double[] RGBtoAngle(int red, int green, int blue)
+    {
+        if(red > 255 || green > 255 || blue > 255)
+        {
+            return new double[0];
+        }
+        float redFreq   = red * 3.125f + 1500f;
+        float greenFreq = green * 3.125f + 1500f;
+        float blueFreq  = blue * 3.125f + 1500f;
+
+        double redAngle   = (Math.PI * 2 * redFreq) / (format.dwSamplesPerSec);  // * format.wChannels);
+        double greenAngle = (Math.PI * 2 * greenFreq) / (format.dwSamplesPerSec);  // * format.wChannels);
+        double blueAngle  = (Math.PI * 2 * blueFreq) / (format.dwSamplesPerSec);  // * format.wChannels);
+        double[] returnVal = new double[3];
+
+        returnVal[0] = redAngle;
+        returnVal[1] = greenAngle;
+        returnVal[2] = blueAngle;
+
+        return returnVal;
     }
 }
 
